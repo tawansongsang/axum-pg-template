@@ -1,0 +1,17 @@
+@hostname = localhost
+@port = 8080
+@host = {{hostname}}:{{port}}
+@baseurl = http://{{host}}
+
+POST {{baseurl}}/api/tickets HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Ticket ABC"
+}
+
+###
+GET {{baseurl}}/api/tickets HTTP/1.1
+
+###
+DELETE {{baseurl}}/api/tickets/0 HTTP/1.1
