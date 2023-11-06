@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "serayuzgur.crates",
+        "tamasfe.even-better-toml",
+        "rust-lang.rust-analyzer",
+        "dustypomerleau.rust-syntax",
+        "christian-kohler.path-intellisense",
+        "humao.rest-client"
+    ]
+}
