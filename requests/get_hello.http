@@ -1,0 +1,6 @@
+@hostname = localhost
+@port = 8080
+@host = {{hostname}}:{{port}}
+@baseurl = http://{{host}}
+
+GET {{baseurl}}/hello HTTP/1.1
