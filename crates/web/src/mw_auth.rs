@@ -13,7 +13,7 @@ use crate::error::{Error, Result};
 use crate::routes::AUTH_TOKEN;
 
 pub async fn mw_require_auth<B>(
-    cookies: Cookies,
+    ctx: Result<Ctx>,
     req: Request<B>,
     next: Next<B>,
 ) -> Result<Response> {
