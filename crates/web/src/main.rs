@@ -1,4 +1,4 @@
-use crate::model::ModelController;
+use crate::{log::log_request, model::ModelController};
 
 pub use self::error::{Error, Result};
 
@@ -6,14 +6,16 @@ use std::net::SocketAddr;
 
 use axum::{
     extract::{Path, Query},
+    http::{Method, Uri},
     middleware,
     response::{Html, IntoResponse, Response},
     routing::{get, get_service},
     Json, Router,
 };
+use ctx::Ctx;
 use serde::Deserialize;
 use serde_json::json;
-use tower_cookies::CookieManagerLayer;
+use tower_cookies::{service, CookieManagerLayer};
 use tower_http::services::ServeDir;
 use uuid::Uuid;
 
@@ -56,7 +58,12 @@ async fn main() -> Result<()> {
     Ok(())
 }
 
-async fn main_response_mapper(res: Response) -> Response {
+async fn main_response_mapper(
+    ctx: Option<Ctx>,
+    uri: Uri,
+    req_method: Method,
+    res: Response,
+) -> Response {
     println!("--> {:<12} - main_response_mapper", "RES_MAPPER");
     let uuid = Uuid::new_v4();
 
@@ -81,8 +88,9 @@ async fn main_response_mapper(res: Response) -> Response {
             (*status_code, Json(client_error_body)).into_response()
         });
 
-    // -- TODO: Build and log the server log line.
-    println!("  ->> server log line - {uuid} - Error: {service_error:?}");
+    // Build and log the server log line.
+    let client_error = client_status_error.unzip().1;
+    log_request(uuid, req_method, uri, ctx, service_error, client_error).await;
 
     println!();
     error_response.unwrap_or(res)
