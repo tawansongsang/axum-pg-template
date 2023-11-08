@@ -28,7 +28,27 @@ pub async fn log_request(
         .ok()
         .and_then(|mut v| v.get_mut("data").map(|v| v.take()));
 
-    todo!()
+    // Create the RequestLogLine
+    let log_line = RequestLogLine {
+        uuid: uuid.to_string(),
+        timestamp: timestamp.to_string(),
+
+        req_path: uri.to_string(),
+        req_method: req_method.to_string(),
+
+        user_id: ctx.map(|c| c.user_id()),
+
+        client_error_type: client_error.map(|e| e.as_ref().to_string()),
+
+        error_type,
+        error_data,
+    };
+
+    println!("  ->> log_reqeust: \n{}", json!(log_line));
+
+    // TODO - Send to cloud-watch or other log tool.
+
+    Ok(())
 }
 
 #[skip_serializing_none]
@@ -42,7 +62,7 @@ struct RequestLogLine {
 
     // -- http request attributes.
     req_path: String,
-    req_methos: String,
+    req_method: String,
 
     // -- Errors attributes.
     client_error_type: Option<String>,
