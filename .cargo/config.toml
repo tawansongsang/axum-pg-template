@@ -6,3 +6,15 @@
 
 # Scop down tracing, to filter out external lib tracing.
 RUST_LOG = "web=debug"
+
+# -- Service Environment Variables
+# IMPORTANT:
+#    For cargo command only.
+#    For deployed env, should be managed by container
+#    (e.g., Kubernetes).
+
+## -- ConfigMap
+
+# This willbe relative to cargo.toml
+# In deployed images, probably use absolute path.
+SERVICE_WEB_FOLDER = "web-folder/"

@@ -1,11 +1,14 @@
+// region:    --- Modules
+
+mod config;
 mod ctx;
 mod error;
 mod log;
 mod model;
 mod routes;
 
-// region:    --- Modules
 pub use self::error::{Error, Result};
+pub use config::config; // can use crate::config
 
 use std::net::SocketAddr;
 
