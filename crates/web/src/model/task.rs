@@ -5,6 +5,8 @@ use crate::model::Result;
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 
+use crate::model::base::{self, DbBmc};
+
 // region:    --- Task Types
 #[derive(Debug, Clone, FromRow, Serialize)]
 pub struct Task {
@@ -27,6 +29,10 @@ pub struct TaskForUpdate {
 // region:    --- TaskBmc
 pub struct TaskBmc;
 
+impl DbBmc for TaskBmc {
+    const TABLE: &'static str = "task";
+}
+
 impl TaskBmc {
     pub async fn create(_ctx: &Ctx, mm: &ModelManager, task_c: TaskForCreate) -> Result<i64> {
         let db = mm.db();
@@ -41,17 +47,9 @@ impl TaskBmc {
         Ok(id)
     }
 
-    pub async fn get(_ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<Task> {
-        let db = mm.db();
-
-        // -- Change to store procedure
-        let task: Task = sqlx::query_as("SELECT * FROM task WHERE id = $1")
-            .bind(id)
-            .fetch_optional(db)
-            .await?
-            .ok_or(Error::EntityNotFound { entity: "task", id })?;
-
-        Ok(task)
+    pub async fn get(ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<Task> {
+        // base::get::<Self, _>(ctx, mm, id).await // same result but let complier infer type
+        base::get::<Self, Task>(ctx, mm, id).await
     }
 
     pub async fn list(_ctx: &Ctx, mm: &ModelManager) -> Result<Vec<Task>> {
@@ -63,6 +61,8 @@ impl TaskBmc {
 
         Ok(tasks)
     }
+
+    // TODO: update
 
     pub async fn delete(_ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<()> {
         let db = mm.db();
