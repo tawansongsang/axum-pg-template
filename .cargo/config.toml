@@ -19,6 +19,11 @@ RUST_LOG = "web=debug"
 # i.e., Encryption not needed.
 POSTGRES_URL = "postgres://app_user:dev_only_pwd@db/app_db"
 
+SERVICE_PWD_KEY = "eG_QXzBjNyyCOQZiUh3Y1mWBBFRHuReMKz9zQiBIifVjRQK33j12PHDSqgoJjqtOvkPRh1pvuQcj_urCJBvM6A"
+
+SERVICE_TOKEN_KEY = "_WoBFFFjwUGnlG0lkDFV5l9mWvNs7FnMfHe9UHJheTCtuMUpuAc22fYmh-Y8iojvgr7j8NLTzFjBSB8nr8SDYg"
+
+SERVICE_TOKEN_DURATION_SEC = "1800" # 30 minutes
 
 ## -- ConfigMap
 

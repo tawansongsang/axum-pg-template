@@ -12,6 +12,12 @@ pub fn config() -> &'static Config {
 
 #[allow(non_snake_case)]
 pub struct Config {
+    // -- Crypt
+    pub PWD_KEY: Vec<u8>,
+
+    pub TOKEN_KEY: Vec<u8>,
+    pub TOKEN_DURATION_SEC: f64,
+
     // -- Db
     pub DB_URL: String,
 
@@ -22,6 +28,12 @@ pub struct Config {
 impl Config {
     fn load_from_env() -> Result<Config> {
         Ok(Config {
+            // -- Crypt
+            PWD_KEY: get_env_b64u_as_u8s("SERVICE_PWD_KEY")?,
+
+            TOKEN_KEY: get_env_b64u_as_u8s("SERVICE_TOKEN_KEY")?,
+            TOKEN_DURATION_SEC: get_env_parse("SERVICE_TOKEN_DURATION_SEC")?,
+
             // --Db
             DB_URL: get_env("POSTGRES_URL")?,
 
