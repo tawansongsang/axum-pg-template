@@ -6,6 +6,9 @@ pub type Result<T> = core::result::Result<T, Error>;
 pub enum Error {
     // Key
     KeyFailHmac,
+
+    // -- Pwd
+    PwdNotMatching,
 }
 
 // region:    --- Error Boilerplate

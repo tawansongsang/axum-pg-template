@@ -46,7 +46,7 @@ async fn main() -> Result<()> {
     // let routes_rpc = rpc::routes(mm.clone())
     //     .route_layer(middleware::from_fn(mw_auth::mw_require_auth));
     let routes_all = Router::new()
-        .merge(routes::routes_login::routes())
+        .merge(routes::routes_login::routes(mm.clone()))
         // .nest("/api", routes_apis)
         .layer(middleware::map_response(mw_response_map))
         .layer(middleware::from_fn_with_state(mm.clone(), mw_ctx_resolve))

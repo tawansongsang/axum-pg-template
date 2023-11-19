@@ -5,7 +5,7 @@ use axum::{
 use serde::Serialize;
 use tracing::debug;
 
-use crate::routes;
+use crate::{model, routes};
 
 pub type Result<T> = core::result::Result<T, Error>;
 
@@ -14,9 +14,24 @@ pub type Result<T> = core::result::Result<T, Error>;
 pub enum Error {
     // -- Login
     LoginFail,
+    LoginFailUsernameNotFound,
+    LoginFailUserHasNoPwd { user_id: i64 },
+    LoginFailPwdNotMatching { user_id: i64 },
+
     // -- CtxExtError
     CtxExt(routes::mw_auth::CtxExtError),
+
+    // -- Modules
+    Model(model::Error),
 }
+
+// region:    --- Froms
+impl From<model::Error> for Error {
+    fn from(value: model::Error) -> Self {
+        Self::Model(value)
+    }
+}
+// endregion: --- Froms
 
 // region:    --- Axum IntoResponse
 impl IntoResponse for Error {
@@ -52,8 +67,13 @@ impl Error {
         use routes::Error::*;
 
         match self {
-            // -- Login/Auth
+            // -- Login
+            LoginFailUsernameNotFound
+            | LoginFailUserHasNoPwd { .. }
+            | LoginFailPwdNotMatching { .. } => (StatusCode::FORBIDDEN, ClientError::LOGIN_FAIL),
+            // -- Auth
             CtxExt(_) => (StatusCode::FORBIDDEN, ClientError::NO_AUTH),
+
             // -- Fallback.
             _ => (
                 StatusCode::INTERNAL_SERVER_ERROR,
