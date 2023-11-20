@@ -7,6 +7,7 @@ mod error;
 mod log;
 mod model;
 mod routes;
+mod utils;
 
 // #[cfg(test)] // Commented during early development.
 pub mod _dev_utils;
