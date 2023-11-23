@@ -2,6 +2,7 @@ use std::fmt::Display;
 
 use crate::config;
 use crate::crypt::{Error, Result};
+use crate::utils::b64u_encode;
 
 // region:    --- Token Type
 
@@ -17,7 +18,13 @@ pub struct Token {
 // FIXME: Display
 impl Display for Token {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        todo!()
+        write!(
+            f,
+            "{}.{}.{}",
+            b64u_encode(&self.ident),
+            b64u_encode(&self.exp),
+            self.sign_b64u
+        )
     }
 }
 
@@ -29,7 +36,7 @@ pub fn generate_web_token(user: &str, salt: &str) -> Result<Token> {
     _generate_token(user, config.TOKEN_DURATION_SEC, salt, &config.TOKEN_KEY)
 }
 
-pub fn validate_web_token(origin_token: &str, salt: &str) -> Result<()> {
+pub fn validate_web_token(origin_token: &Token, salt: &str) -> Result<()> {
     let config = &config();
     _validate_token_sign_and_exp(origin_token, salt, &config.TOKEN_KEY)?;
 
