@@ -37,7 +37,7 @@ pub fn b64u_decode(b64u: &str) -> Result<String> {
     let decoded_string = base64_url::decode(b64u)
         .ok()
         .and_then(|r| String::from_utf8(r).ok())
-        .ok_or(Error::FailToB64uDecode);
+        .ok_or(Error::FailToB64uDecode)?;
 
     Ok(decoded_string)
 }
