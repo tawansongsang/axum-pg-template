@@ -118,7 +118,6 @@ mod tests {
     use super::*;
     use crate::_dev_utils;
     use anyhow::{Context, Result};
-    use serial_test::serial;
 
     #[tokio::test]
     async fn test_first_ok_demo1() -> Result<()> {

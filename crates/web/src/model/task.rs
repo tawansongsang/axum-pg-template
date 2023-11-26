@@ -65,7 +65,7 @@ impl TaskBmc {
 // region:    --- TaskBmc Tests
 #[cfg(test)]
 mod tests {
-    use crate::_dev_utils;
+    use crate::{_dev_utils, model::Error};
 
     use super::*;
     use anyhow::Result;
