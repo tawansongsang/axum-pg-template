@@ -20,12 +20,12 @@ use std::net::SocketAddr;
 use crate::{
     model::ModelManager,
     routes::{
-        mw_auth::{self, mw_ctx_require, mw_ctx_resolve},
+        mw_auth::{self, mw_ctx_resolve},
         mw_res_map::mw_response_map,
         routes_static, rpc,
     },
 };
-use axum::{middleware, response::Html, routing::get, Router};
+use axum::{middleware, Router};
 use tower_cookies::CookieManagerLayer;
 use tracing::info;
 use tracing_subscriber::EnvFilter;

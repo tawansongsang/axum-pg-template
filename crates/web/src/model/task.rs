@@ -1,5 +1,4 @@
 use crate::ctx::Ctx;
-use crate::model::Error;
 use crate::model::ModelManager;
 use crate::model::Result;
 use serde::{Deserialize, Serialize};
